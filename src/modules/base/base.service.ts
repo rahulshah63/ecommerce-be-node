@@ -1,10 +1,10 @@
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { BaseServiceAbstract } from './base.abstract';
 import { MessagesMapping } from '@/config/messages-mapping';
+import { IBaseService } from './base.interface';
 
-export abstract class BaseService implements BaseServiceAbstract {
+export abstract class BaseService implements IBaseService<Document> {
   constructor(protected readonly repository) {}
 
   create(doc: Partial<any>): Promise<any> {

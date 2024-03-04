@@ -13,6 +13,7 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { config } from 'dotenv';
 import { Logger } from '@nestjs/common';
+import { LoggerMiddleware } from './middlewares/http-logger.middleware';
 
 class App {
   public app: express.Application;
@@ -31,6 +32,7 @@ class App {
     this.initializeRoutes(routes);
     // this.initializeSwagger();
     this.initializeErrorHandling();
+    new LoggerMiddleware();
   }
 
   public listen() {

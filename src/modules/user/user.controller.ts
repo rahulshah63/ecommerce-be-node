@@ -1,31 +1,98 @@
-import { Body, Param } from '@nestjs/common';
+import { Controller, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UserService } from './user.service';
+import UserService from './user.service';
+import { Request, Response, NextFunction } from 'express';
 
+@Controller('user')
 export class UserController {
-  constructor(private readonly service: UserService) {}
+  static instance: null | UserController;
 
-  async create(@Body() data: CreateUserDto) {
-    return this.service.create(data);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor(private userService = UserService) {}
+
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new UserController();
+    }
+    return this.instance;
   }
 
-  async getLoggedinUserDetails(user: any) {
-    return this.service.getLoggedinUserDetails(user._id);
-  }
+  // Route: POST: /v1/user/create
+  public create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createUserDto: CreateUserDto = req.body;
+      const response = await this.userService.create(createUserDto);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
 
-  async deleteLoggedinUserDetails(user: any) {
-    return this.service.deleteLoggedinUserDetails(user._id);
-  }
+  // Route: GET: /v1/user/info
+  public getLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.userService.getLoggedinUserDetails(req.user._id);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
 
-  async updateById(@Param('id') id: string, @Body() data: any) {
-    return this.service.updateById(id, data);
-  }
+  // Route: POST: /v1/user/delete
+  public deleteLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.userService.deleteLoggedinUserDetails(req.user._id);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
 
-  async findById(@Param('id') id: string) {
-    return this.service.findById(id);
-  }
+  // Route: POST: /v1/user/update/:id
+  public updateById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const response = await this.userService.updateById(id, data);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
 
-  async deleteById(@Param('id') id: string) {
-    this.service.deleteById(id);
-  }
+  // Route: GET: /v1/user/:id
+  public findById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const response = await this.userService.findById(id);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
+
+  // Route: POST: /v1/user/delete/:id
+  public deleteById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const response = await this.userService.deleteById(id);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
 }
+
+export default UserController.getInstance();

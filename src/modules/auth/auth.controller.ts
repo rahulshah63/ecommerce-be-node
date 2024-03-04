@@ -24,82 +24,82 @@ export class AuthController {
     return this.instance;
   }
 
-  // Route: POST: /auth/login
+  // Route: POST: /v1/auth/login
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const loginDto: LoginDto = req.body;
       const response = await this.authService.login(loginDto);
-      res.status(HttpStatus.OK).send(response);
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
+      next(error);
       throw error;
-      // next(error);
     }
   };
 
-  // Route: POST: /auth/register
+  // Route: POST: /v1/auth/register
   public register = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const registerUserDto: RegisterDto = req.body;
       const response = await this.authService.register(registerUserDto);
-      res.status(HttpStatus.OK).send(response);
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
+      next(error);
       throw error;
-      // next(error);
     }
   };
 
-  // Route: POST: /auth/logout
+  // Route: POST: /v1/auth/logout
   public logout = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const logoutDto: LogoutDto = req.body;
       const response = await this.authService.logout(logoutDto);
-      res.status(HttpStatus.OK).send(response);
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
+      next(error);
       throw error;
-      // next(error);
     }
   };
 
-  // Route: GET: /generate/tokens
+  // Route: GET: /v1/auth/generate/tokens
   public generateTokens = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tokenDto: TokenDto = req.body;
       const response = await this.authService.generateTokens(tokenDto);
-      res.status(HttpStatus.OK).send(response);
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
+      next(error);
       throw error;
-      // next(error);
     }
   };
 
-  // Route: GET: /auth/forgot-password
+  // Route: GET: /v1/auth/forgot-password
   public forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const forgotPasswordDto: ForgotPasswordDto = req.body;
       const response = await this.authService.forgotPassword(forgotPasswordDto);
-      res.status(HttpStatus.OK).send(response);
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
+      next(error);
       throw error;
-      // next(error);
     }
   };
 
-  // Route: GET: /auth/reset-password
+  // Route: GET: /v1/auth/reset-password
   public resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const resetPasswordDto: ResetPasswordDto = req.body;
       const { token } = req.query;
       const response = await this.authService.resetPassword(resetPasswordDto, token as string);
-      res.status(HttpStatus.OK).send(response);
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
+      next(error);
       throw error;
-      // next(error);
     }
   };
 }
