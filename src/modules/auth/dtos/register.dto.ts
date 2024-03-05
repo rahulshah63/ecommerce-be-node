@@ -1,18 +1,25 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ROLE } from '../../user/user.interface';
 
 export class RegisterDto {
   @IsString()
+  @IsEmail()
   @IsNotEmpty()
-  firstName: string;
+  email: string;
 
   @IsString()
   @IsNotEmpty()
-  lastName: string;
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsEnum(ROLE)
   role: ROLE;
 
   @IsString()
-  @IsNotEmpty()
-  email: string;
-  password: string;
+  phone: string;
 }

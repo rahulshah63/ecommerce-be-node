@@ -13,19 +13,13 @@ const addressSchema: Schema<IAddress & Document> = new Schema({
     type: String,
     required: true,
   },
-  zipCode: {
+  zip: {
     type: Number,
     required: true,
   },
 });
 
 const UserSchema: Schema<IUserDocument> = new Schema({
-  userId: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true,
-  },
   email: {
     type: String,
     required: true,
@@ -37,7 +31,7 @@ const UserSchema: Schema<IUserDocument> = new Schema({
     required: true,
   },
   phone: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },
@@ -47,7 +41,6 @@ const UserSchema: Schema<IUserDocument> = new Schema({
     type: String,
     required: true,
   },
-  provider: { type: String },
 });
 
 const UserModel = model('user', UserSchema);

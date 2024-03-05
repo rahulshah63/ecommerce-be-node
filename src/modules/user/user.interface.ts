@@ -9,16 +9,14 @@ export enum ROLE {
 export interface IAddress {
   street: string;
   city: string;
-  zipCode: number;
+  zip: number;
 }
 
 export interface IUserDocument extends Document {
-  userId: string;
   email: string;
   name: string;
   password: string;
   role: ROLE;
-  phone: number;
+  phone: string;
   address: IAddress;
-  provider?: string;
 }

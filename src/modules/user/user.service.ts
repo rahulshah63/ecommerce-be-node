@@ -10,7 +10,7 @@ export class UserService extends BaseService {
   static instance: null | UserService;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor(protected readonly repository = UserModel) {
+  private constructor(repository = UserModel) {
     super(repository);
   }
 

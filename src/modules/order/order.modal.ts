@@ -1,6 +1,6 @@
 import { IOrders, PAYMENT_METHODS, PAYMENT_STATUS, STATUS } from '@/interfaces/order.interface';
 import { Document, model, Schema } from 'mongoose';
-import { inventorySchema } from './inventory.modal';
+import { inventorySchema } from '../product/product.modal';
 
 export const orderSchema: Schema<IOrders & Document> = new Schema({
   trackingId: {

@@ -1,14 +1,18 @@
-import { IItems, SUBTYPE, TYPE } from '@/interfaces/item.interface';
-import { Document, model, Schema } from 'mongoose';
+import { ICategoryDocument, SUBTYPE, TYPE } from './category.interface';
+import { model, Schema } from 'mongoose';
 
-const itemSchema: Schema<IItems & Document> = new Schema({
-  itemId: {
+const CategorySchema: Schema<ICategoryDocument> = new Schema({
+  code: {
     type: Number,
     required: true,
     unique: true,
     index: true,
   },
   name: {
+    type: String,
+    required: true,
+  },
+  description: {
     type: String,
     required: true,
   },
@@ -21,6 +25,6 @@ const itemSchema: Schema<IItems & Document> = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const itemModel = model<IItems & Document>('items', itemSchema);
+const CategoryModel = model<ICategoryDocument>('category', CategorySchema);
 
-export default itemModel;
+export default CategoryModel;

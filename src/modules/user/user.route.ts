@@ -15,11 +15,12 @@ class UserRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/create`, [validationMiddleware(CreateUserDto, 'body')], UserController.create);
-    this.router.get(`${this.path}/info`, UserController.getLoggedinUserDetails);
-    this.router.post(`${this.path}/delete`, UserController.deleteLoggedinUserDetails);
-    this.router.put(`${this.path}/update/:id`, UserController.updateById);
+    this.router.get(`${this.path}/me`, UserController.getLoggedinUserDetails);
+    this.router.delete(`${this.path}/me`, UserController.deleteLoggedinUserDetails);
+    this.router.put(`${this.path}/:id`, UserController.updateById);
+    this.router.get(`${this.path}/all`, UserController.findAll);
     this.router.get(`${this.path}/:id`, UserController.findById);
-    this.router.post(`${this.path}/delete/:id`, UserController.deleteById);
+    this.router.delete(`${this.path}/:id`, UserController.deleteById);
   }
 }
 

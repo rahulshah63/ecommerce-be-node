@@ -3,13 +3,13 @@ import { ROLE } from '../user.interface';
 
 export class CreateUserDto {
   @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @IsString()
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
   @IsString()
   @IsNotEmpty()
@@ -22,9 +22,5 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  address?: string;
-
-  @IsString()
-  @IsOptional()
-  phone?: string;
+  phone: string;
 }

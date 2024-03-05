@@ -30,7 +30,7 @@ export class UserController {
     }
   };
 
-  // Route: GET: /v1/user/info
+  // Route: GET: /v1/user/me
   public getLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = await this.userService.getLoggedinUserDetails(req.user._id);
@@ -42,7 +42,7 @@ export class UserController {
     }
   };
 
-  // Route: POST: /v1/user/delete
+  // Route: DELETE: /v1/user/me
   public deleteLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = await this.userService.deleteLoggedinUserDetails(req.user._id);
@@ -54,12 +54,24 @@ export class UserController {
     }
   };
 
-  // Route: POST: /v1/user/update/:id
+  // Route: PUT: /v1/user/:id
   public updateById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const data = req.body;
       const response = await this.userService.updateById(id, data);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      next(error);
+      throw error;
+    }
+  };
+
+  // Route: GET: /v1/user/all
+  public findAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.userService.find({});
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
@@ -81,7 +93,7 @@ export class UserController {
     }
   };
 
-  // Route: POST: /v1/user/delete/:id
+  // Route: DELETE: /v1/user/:id
   public deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
