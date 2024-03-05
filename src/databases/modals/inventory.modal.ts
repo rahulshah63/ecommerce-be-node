@@ -20,7 +20,7 @@ export const inventorySchema: Schema<IInventory & Document> = new Schema({
   },
   stock: { type: String, enum: Object.values(AVAILABILITY), required: true },
   addedBy: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'user',
     required: true,
     index: true,
