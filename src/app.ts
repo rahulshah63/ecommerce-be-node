@@ -11,7 +11,6 @@ import swaggerUi from 'swagger-ui-express';
 import { AppConfig } from '@/config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
-import { config } from 'dotenv';
 import { Logger } from '@nestjs/common';
 import { LoggerMiddleware } from './middlewares/http-logger.middleware';
 
@@ -22,7 +21,6 @@ class App {
   public logger = new Logger();
 
   constructor(routes: Routes[]) {
-    config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
     this.app = express();
     this.env = AppConfig.env || 'development';
     this.port = AppConfig.port || 3000;
@@ -57,8 +55,13 @@ class App {
   }
 
   private initializeMiddlewares() {
-    // this.app.use(morgan(LOG_FORMAT, { stream }));
-    // this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
+    const stream = {
+      write: (message: string) => {
+        this.logger.log(message.substring(0, message.lastIndexOf('\n')));
+      },
+    };
+    this.app.use(morgan(AppConfig.log_format, { stream }));
+    this.app.use(cors({ origin: AppConfig.origin, credentials: AppConfig.credential }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());

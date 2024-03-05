@@ -25,34 +25,31 @@ export class UserController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
   // Route: GET: /v1/user/me
   public getLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {user} :any= req
+      const { user }: any = req;
       const response = await this.userService.getLoggedinUserDetails(user._id);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
   // Route: DELETE: /v1/user/me
   public deleteLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {user} :any= req
+      const { user }: any = req;
       const response = await this.userService.deleteLoggedinUserDetails(user._id);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -65,8 +62,7 @@ export class UserController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -77,8 +73,7 @@ export class UserController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -90,8 +85,7 @@ export class UserController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -103,8 +97,7 @@ export class UserController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 }

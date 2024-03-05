@@ -32,8 +32,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -45,8 +44,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -58,8 +56,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -71,8 +68,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -84,8 +80,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 
@@ -98,8 +93,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
-      next(error);
-      throw error;
+      return next(error);
     }
   };
 }

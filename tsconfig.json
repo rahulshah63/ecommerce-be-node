@@ -12,7 +12,7 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "module": "Node16",
+    "module": "NodeNext",
     "pretty": true,
     "sourceMap": true,
     "declaration": true,

@@ -1,6 +1,5 @@
 import { config } from 'dotenv';
-
-config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
+config();
 
 const AWSConfig = {
   bucketCreate: process.env.AWS_BUCKET_CREATE,
