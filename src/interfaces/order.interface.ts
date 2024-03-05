@@ -1,6 +1,5 @@
 import { ValueOf } from '@/utils/util';
 import { IInventory } from '@/interfaces/inventory.interface';
-import { IAddress, IUser } from '@/interfaces/user.interface';
 
 export const STATUS = {
   DELIVERED: 'delivered',

@@ -33,7 +33,8 @@ export class UserController {
   // Route: GET: /v1/user/info
   public getLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await this.userService.getLoggedinUserDetails(req.user._id);
+      const {user} :any= req
+      const response = await this.userService.getLoggedinUserDetails(user._id);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
@@ -45,7 +46,8 @@ export class UserController {
   // Route: POST: /v1/user/delete
   public deleteLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await this.userService.deleteLoggedinUserDetails(req.user._id);
+      const {user} :any= req
+      const response = await this.userService.deleteLoggedinUserDetails(user._id);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
