@@ -1,6 +1,6 @@
-import { IOrders, PAYMENT_METHODS, PAYMENT_STATUS, STATUS } from '@/interfaces/order.interface';
+import { IOrders, PAYMENT_METHODS, PAYMENT_STATUS, STATUS } from './order.interface';
 import { Document, model, Schema } from 'mongoose';
-import { inventorySchema } from '../product/product.modal';
+import { ProductSchema } from '../product/product.modal';
 
 export const orderSchema: Schema<IOrders & Document> = new Schema({
   trackingId: {
@@ -41,7 +41,7 @@ export const orderSchema: Schema<IOrders & Document> = new Schema({
   orderedItem: {
     type: [
       {
-        item: inventorySchema,
+        item: ProductSchema,
         weight: {
           type: Number,
           required: true,

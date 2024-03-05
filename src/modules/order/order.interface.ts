@@ -1,6 +1,5 @@
 import { ValueOf } from '@/utils/util';
-import { IInventory } from '@/interfaces/inventory.interface';
-import { IAddress, IUser } from '@/interfaces/user.interface';
+import { IProductDocument } from '../product/product.interface';
 
 export const STATUS = {
   DELIVERED: 'delivered',
@@ -33,9 +32,9 @@ export interface IOrders {
   amount: number;
   paymentStatus: ValueOf<typeof PAYMENT_STATUS>;
   paymentMethod: ValueOf<typeof PAYMENT_METHODS>;
-  orderedBy: IUser;
+  orderedBy: any; // ! Updated since no IUser was defined.
   orderedItem: {
-    item: IInventory;
+    item: IProductDocument;
     weight: number;
   }[];
   issue?: string;
