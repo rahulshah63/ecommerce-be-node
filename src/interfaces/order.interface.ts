@@ -33,7 +33,7 @@ export interface IOrders {
   amount: number;
   paymentStatus: ValueOf<typeof PAYMENT_STATUS>;
   paymentMethod: ValueOf<typeof PAYMENT_METHODS>;
-  orderedBy: IUser;
+  orderedBy: any; // ! Updated since no IUser was defined.
   orderedItem: {
     item: IInventory;
     weight: number;
