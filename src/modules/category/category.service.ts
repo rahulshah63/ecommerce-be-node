@@ -7,7 +7,7 @@ import CategoryModel from './category.modal';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 
 @Injectable()
-export class CategoryService extends BaseService {
+export class CategoryService extends BaseService<ICategoryDocument> {
   static instance: null | CategoryService;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -52,24 +52,24 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  async deleteById(id: string | Types.ObjectId): Promise<ICategoryDocument> {
-    const result = await this.repository.deleteById(id);
+  async deleteById(id: string | Types.ObjectId) {
+    const result = await this.repository.deleteOne({ _id: id });
 
     if (!result) {
       throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
     }
 
-    if (result.image) {
-      // const image = await this.imageService.findById(result.image);
+    // if (result.image) {
+    // const image = await this.imageService.findById(result.image);
 
-      // await this.awsService.s3DeleteItemInBucket(image.pathWithFilename);
+    // await this.awsService.s3DeleteItemInBucket(image.pathWithFilename);
 
-      // await this.imageService.deleteById(image._id);
+    // await this.imageService.deleteById(image._id);
 
-      result.image = undefined;
-    }
+    //   result.image = undefined;
+    // }
 
-    return result;
+    return; //result;
   }
 }
 

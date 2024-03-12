@@ -69,7 +69,7 @@ export class ProductController {
   public deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const response = await this.productService.deleteById(id);
+      const response = await this.productService.deleteOne({ _id: id });
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

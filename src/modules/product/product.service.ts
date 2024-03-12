@@ -8,7 +8,7 @@ import { CreateProductDto } from './dtos/create-product.dto';
 import { IProductDocument } from './product.interface';
 
 @Injectable()
-export class ProductService extends BaseService {
+export class ProductService extends BaseService<IProductDocument> {
   static instance: null | ProductService;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -37,7 +37,7 @@ export class ProductService extends BaseService {
     return this.repository.create(data);
   }
 
-  async updateById(id: string | Types.ObjectId, data: any): Promise<IProductDocument> {
+  async updateById(id: string | Types.ObjectId, data: any) {
     const item = await this.repository.findById(id);
 
     if (!item) {
@@ -56,7 +56,7 @@ export class ProductService extends BaseService {
       data = item;
     }
 
-    return this.repository.updateById(id, data);
+    return await this.repository.updateOne({ _id: id }, data);
   }
 }
 

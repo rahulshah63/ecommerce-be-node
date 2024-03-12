@@ -14,10 +14,6 @@ const AuthConfig = {
     secretKey: process.env.AUTH_JWT_FORGOT_PASSWORD_TOKEN_SECRET_KEY,
     expirationTime: 1,
   },
-  verifyEmailToken: {
-    secretKey: process.env.AUTH_JWT_VERIFY_EMAIL_TOKEN_SECRET_KEY,
-    expirationTime: 1,
-  },
 } as const;
 
 export default AuthConfig;

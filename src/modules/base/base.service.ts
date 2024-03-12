@@ -1,11 +1,10 @@
-import { Document, Types } from 'mongoose';
-
+import { Document, Types, Model } from 'mongoose';
+import { IBaseService } from './base.interface';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { MessagesMapping } from '@/config/messages-mapping';
-import { IBaseService } from './base.interface';
 
-export abstract class BaseService implements IBaseService<Document> {
-  constructor(protected readonly repository) {}
+export abstract class BaseService<T> implements IBaseService<Document> {
+  constructor(public readonly repository: Model<T>) {}
 
   create(doc: Partial<any>): Promise<any> {
     return this.repository.create(doc);
@@ -30,22 +29,14 @@ export abstract class BaseService implements IBaseService<Document> {
     return result;
   }
 
-  find(filter: object): Promise<any[]> {
-    return this.repository.find(filter);
-  }
-
-  async updateById(id: string | Types.ObjectId, update: object): Promise<any> {
-    const result = await this.repository.updateById(id, update);
-
-    if (!result) {
-      throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
-    }
-
-    return result;
+  async find(filter: object): Promise<any[]> {
+    return await this.repository.find(filter);
   }
 
   async updateOne(filter: object, update: object): Promise<any> {
-    const result = await this.repository.updateOne(filter, update);
+    const result = await this.repository.updateOne(filter, update, {
+      upsert: true,
+    });
 
     if (!result) {
       throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
@@ -56,16 +47,6 @@ export abstract class BaseService implements IBaseService<Document> {
 
   async updateMany(filter: object, update: object): Promise<any> {
     const result = await this.repository.updateMany(filter, update);
-
-    if (!result) {
-      throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
-    }
-
-    return result;
-  }
-
-  async deleteById(id: string | Types.ObjectId): Promise<any> {
-    const result = await this.repository.deleteById(id);
 
     if (!result) {
       throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);

@@ -6,7 +6,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { BaseService } from '../base/base.service';
 
 @Injectable()
-export class UserService extends BaseService {
+export class UserService extends BaseService<IUserDocument> {
   static instance: null | UserService;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
