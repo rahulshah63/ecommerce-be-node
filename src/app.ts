@@ -70,11 +70,26 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
-    this.app.use(session({ secret: AppConfig.secret, resave: true, saveUninitialized: true }));
+    this.app.use(
+      session({
+        secret: AppConfig.secret,
+        resave: true,
+        saveUninitialized: true,
+        cookie: {
+          maxAge: 1000 * 60 * 60 * 24, // 1 day
+        },
+      }),
+    );
     this.app.use(passport.initialize());
     this.app.use(passport.session());
     passport.use(new GoogleStrategy());
     passport.use(new JwtStrategy());
+    passport.serializeUser((user, done) => {
+      done(null, user);
+    });
+    passport.deserializeUser((user, done) => {
+      done(null, user);
+    });
   }
 
   private initializeRoutes(routes: Routes[]) {
