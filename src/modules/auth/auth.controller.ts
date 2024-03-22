@@ -9,6 +9,7 @@ import { TokenDto } from './dtos/token.dto';
 
 import AuthService from './auth.service';
 import { NextFunction, Request, Response } from 'express';
+import axios from 'axios';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +24,20 @@ export class AuthController {
     }
     return this.instance;
   }
+
+  // Route: GET: /v1/auth/google
+  //forward the request to goggle's authentication server
+  public googleAuth = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await axios.get('https://accounts.google.com/o/oauth2/v2/auth', {
+        params: req.query,
+      });
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      return next(error);
+    }
+  };
 
   // Route: POST: /v1/auth/login
   public login = async (req: Request, res: Response, next: NextFunction) => {

@@ -16,10 +16,8 @@ class UserRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}/me`, UserController.getLoggedinUserDetails);
     this.router.delete(`${this.path}/me`, UserController.deleteLoggedinUserDetails);
-    this.router.put(`${this.path}/:id`, UserController.updateById);
     this.router.get(`${this.path}/all`, UserController.findAll);
-    this.router.get(`${this.path}/:id`, UserController.findById);
-    this.router.delete(`${this.path}/:id`, UserController.deleteById);
+    this.router.route(`${this.path}/:id`).put(UserController.updateById).get(UserController.findById).delete(UserController.deleteById);
   }
 }
 

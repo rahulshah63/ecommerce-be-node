@@ -11,6 +11,7 @@ const AppConfig = {
   log_format: process.env.LOG_FORMAT,
   origin: process.env.ORIGIN,
   secret: process.env.SECRET,
+  client_url: process.env.CLIENT_URL,
 } as const;
 
 export default AppConfig;

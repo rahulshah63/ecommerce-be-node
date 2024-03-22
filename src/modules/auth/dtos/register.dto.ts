@@ -16,7 +16,7 @@ export class RegisterDto {
   password: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(ROLE)
   role: ROLE;
 

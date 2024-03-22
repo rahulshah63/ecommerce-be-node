@@ -2,6 +2,7 @@ import { Controller, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import UserService from './user.service';
 import { Request, Response, NextFunction } from 'express';
+import { IUser, IUserDocument } from './user.interface';
 
 @Controller('user')
 export class UserController {
@@ -20,7 +21,7 @@ export class UserController {
   // Route: GET: /v1/user/me
   public getLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { user }: any = req;
+      const user = req.user as unknown as IUserDocument;
       const response = await this.userService.getLoggedinUserDetails(user._id);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
@@ -46,7 +47,7 @@ export class UserController {
     try {
       const { id } = req.params;
       const data = req.body;
-      const response = await this.userService.updateById(id, data);
+      const response = await this.userService.updateOne({ _id: id }, data);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
@@ -81,7 +82,7 @@ export class UserController {
   public deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const response = await this.userService.deleteById(id);
+      const response = await this.userService.deleteOne({ _id: id });
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

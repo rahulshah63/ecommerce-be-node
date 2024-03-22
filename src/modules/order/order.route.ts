@@ -16,9 +16,7 @@ class OrderRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}/create`, [validationMiddleware(CreateOrderDto, 'body')], OrderController.create);
     this.router.get(`${this.path}/all`, OrderController.findAll);
-    this.router.get(`${this.path}/:id`, OrderController.findById);
-    this.router.put(`${this.path}/:id`, OrderController.updateById);
-    this.router.delete(`${this.path}/:id`, OrderController.deleteById);
+    this.router.route(`${this.path}/:id`).get(OrderController.findById).put(OrderController.updateById).delete(OrderController.deleteById);
   }
 }
 

@@ -116,11 +116,12 @@ export class AuthService {
     } else if (type === TokenTypes.ACCESS) {
       payload = jwt.verify(token, accessTokenSecret);
     }
+    console.log('t', type, token);
 
     const tokenDoc = await this.tokenRepository.findOne({
       token,
       type,
-      user: payload._id,
+      user: payload.sub._id,
     });
 
     if (!tokenDoc) {

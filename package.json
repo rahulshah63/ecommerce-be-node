@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.3.4",
+    "axios": "^1.6.8",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",

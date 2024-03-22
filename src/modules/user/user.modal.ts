@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { Document, model, Schema } from 'mongoose';
 import { NextFunction } from 'express';
 
