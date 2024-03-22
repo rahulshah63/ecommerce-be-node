@@ -9,11 +9,11 @@ export class RegisterDto {
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  password: string;
 
   @IsString()
-  @IsNotEmpty()
-  password: string;
+  @IsOptional()
+  name: string;
 
   @IsString()
   @IsOptional()
@@ -21,5 +21,6 @@ export class RegisterDto {
   role: ROLE;
 
   @IsString()
+  @IsOptional()
   phone: string;
 }

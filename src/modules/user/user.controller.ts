@@ -45,9 +45,9 @@ export class UserController {
   // Route: PUT: /v1/user/:id
   public updateById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
+      const { userId } = req.params;
       const data = req.body;
-      const response = await this.userService.updateOne({ _id: id }, data);
+      const response = await this.userService.updateOne({ _id: userId }, data);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
@@ -69,8 +69,8 @@ export class UserController {
   // Route: GET: /v1/user/:id
   public findById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
-      const response = await this.userService.findById(id);
+      const { userId } = req.params;
+      const response = await this.userService.findById(userId);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
@@ -81,8 +81,8 @@ export class UserController {
   // Route: DELETE: /v1/user/:id
   public deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
-      const response = await this.userService.deleteOne({ _id: id });
+      const { userId } = req.params;
+      const response = await this.userService.deleteOne({ _id: userId });
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

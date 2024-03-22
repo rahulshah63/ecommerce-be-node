@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import { Document, model, Schema } from 'mongoose';
 import { NextFunction } from 'express';
 
@@ -24,21 +23,19 @@ const UserSchema: Schema<IUserDocument> = new Schema({
     unique: true,
     index: true,
   },
-  name: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  address: addressSchema,
-  role: { type: String, enum: Object.values(ROLE), default: ROLE.CONSUMER },
   password: {
     type: String,
     required: true,
   },
+  name: {
+    type: String,
+  },
+  phone: {
+    type: String,
+    unique: true,
+  },
+  address: addressSchema,
+  role: { type: String, enum: Object.values(ROLE), default: ROLE.CONSUMER },
 });
 
 UserSchema.pre<IUserDocument>('save', function (next: NextFunction) {

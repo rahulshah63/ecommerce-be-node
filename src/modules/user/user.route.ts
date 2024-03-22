@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import UserController from './user.controller';
 import { AppConfig } from '@/config';
-import validationMiddleware from '@/middlewares/validation.middleware';
 import { Routes } from '@/interfaces/routes.interface';
-import { CreateUserDto } from './dtos/create-user.dto';
+import authMiddleware from '@/middlewares/auth.middleware';
+import { adminOnly, currentOnly } from '@/middlewares/access.middleware';
 
 class UserRoute implements Routes {
   public path = `/${AppConfig.versioning}/user`;
@@ -14,10 +14,14 @@ class UserRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/me`, UserController.getLoggedinUserDetails);
-    this.router.delete(`${this.path}/me`, UserController.deleteLoggedinUserDetails);
-    this.router.get(`${this.path}/all`, UserController.findAll);
-    this.router.route(`${this.path}/:id`).put(UserController.updateById).get(UserController.findById).delete(UserController.deleteById);
+    this.router.get(`${this.path}/me`, [authMiddleware], UserController.getLoggedinUserDetails);
+    this.router.delete(`${this.path}/me`, [authMiddleware], UserController.deleteLoggedinUserDetails);
+    this.router.get(`${this.path}/all`, [authMiddleware, adminOnly()], UserController.findAll);
+    this.router
+      .route(`${this.path}/:userId`)
+      .put([authMiddleware, currentOnly()], UserController.updateById)
+      .get([authMiddleware, currentOnly()], UserController.findById)
+      .delete([authMiddleware, adminOnly()], UserController.deleteById);
   }
 }
 
