@@ -6,13 +6,15 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import { connect, set } from 'mongoose';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
 import { AppConfig } from '@/config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { Logger } from '@nestjs/common';
 import { LoggerMiddleware } from './middlewares/http-logger.middleware';
+import passport from 'passport';
+import session from 'express-session';
+import { GoogleStrategy } from './config/google-strategy';
+import { JwtStrategy } from './config/jwt-strategy';
 
 class App {
   public app: express.Application;
@@ -68,6 +70,11 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(session({ secret: AppConfig.secret, resave: true, saveUninitialized: true }));
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
+    passport.use(new GoogleStrategy());
+    passport.use(new JwtStrategy());
   }
 
   private initializeRoutes(routes: Routes[]) {

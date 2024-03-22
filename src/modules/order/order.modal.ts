@@ -1,8 +1,7 @@
-import { IOrders, PAYMENT_METHODS, PAYMENT_STATUS, STATUS } from './order.interface';
-import { Document, model, Schema } from 'mongoose';
-import { ProductSchema } from '../product/product.modal';
+import { IOrderDocument, PAYMENT_METHODS, PAYMENT_STATUS, STATUS } from './order.interface';
+import { model, Schema, Types } from 'mongoose';
 
-export const orderSchema: Schema<IOrders & Document> = new Schema({
+export const orderSchema: Schema<IOrderDocument> = new Schema({
   trackingId: {
     type: Number,
     required: true,
@@ -17,41 +16,32 @@ export const orderSchema: Schema<IOrders & Document> = new Schema({
     type: Number,
     default: 0,
   },
-  deliveryDate: { type: Date, default: Date.now },
   orderedDate: { type: Date, default: Date.now },
-  status: { type: String, enum: Object.values(STATUS), required: true },
-  amount: {
-    type: Number,
-    required: true,
-  },
-  paymentStatus: { type: String, enum: Object.values(PAYMENT_STATUS), required: true },
-  paymentMethod: { type: String, enum: Object.values(PAYMENT_METHODS), required: true },
+  status: { type: String, enum: Object.values(STATUS), default: STATUS.READY_TO_SHIP },
+  // amount: {
+  //   type: Number,
+  //   required: true,
+  // },
+  paymentStatus: { type: String, enum: Object.values(PAYMENT_STATUS), default: PAYMENT_STATUS.UNPAID },
+  paymentMethod: { type: String, enum: Object.values(PAYMENT_METHODS), default: PAYMENT_METHODS.COD },
   orderedBy: {
     type: Schema.Types.ObjectId,
     ref: 'user',
     required: true,
   },
-  issue: {
-    type: String,
-    sparse: true,
-  },
-  //Here, the orderedItem is not referenceing rather making a copy
-  //because we need the snapshot of inventory while creating order
-  //It helps to track any further upcoming issue while delivery failed
-  orderedItem: {
+  items: {
     type: [
       {
-        item: ProductSchema,
-        weight: {
-          type: Number,
-          required: true,
-        },
+        product: { type: Types.ObjectId, ref: 'product', required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+        total: { type: Number, required: true },
       },
     ],
     required: true,
   },
 });
 
-const itemModel = model<IOrders & Document>('orders', orderSchema);
+const itemModel = model<IOrderDocument>('orders', orderSchema);
 
 export default itemModel;

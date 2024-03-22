@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MessagesMapping } from '@/config/messages-mapping';
 import { BaseService } from '../base/base.service';
-import { ICategoryDocument } from './category.interface';
+import { ICategory, ICategoryDocument } from './category.interface';
 import CategoryModel from './category.modal';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 
@@ -24,7 +24,7 @@ export class CategoryService extends BaseService<ICategoryDocument> {
     return this.instance;
   }
 
-  async create(createCategoryDto: CreateCategoryDto): Promise<ICategoryDocument> {
+  async create(createCategoryDto: ICategory): Promise<ICategoryDocument> {
     const result = await this.repository.create(createCategoryDto);
 
     return result;
@@ -50,26 +50,6 @@ export class CategoryService extends BaseService<ICategoryDocument> {
     await category.save();
 
     return category;
-  }
-
-  async deleteById(id: string | Types.ObjectId) {
-    const result = await this.repository.deleteOne({ _id: id });
-
-    if (!result) {
-      throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
-    }
-
-    // if (result.image) {
-    // const image = await this.imageService.findById(result.image);
-
-    // await this.awsService.s3DeleteItemInBucket(image.pathWithFilename);
-
-    // await this.imageService.deleteById(image._id);
-
-    //   result.image = undefined;
-    // }
-
-    return; //result;
   }
 }
 

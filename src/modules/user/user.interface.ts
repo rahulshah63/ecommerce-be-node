@@ -12,7 +12,7 @@ export interface IAddress {
   zip: number;
 }
 
-export interface IUserDocument extends Document {
+export interface IUser {
   email: string;
   name: string;
   password: string;
@@ -20,3 +20,5 @@ export interface IUserDocument extends Document {
   phone: string;
   address: IAddress;
 }
+
+export interface IUserDocument extends IUser, Document {}

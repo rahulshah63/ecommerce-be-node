@@ -10,12 +10,14 @@ export enum SUBTYPE {
   VEGETABLE = 'vegetable',
 }
 
-export interface ICategoryDocument extends Document {
-  code: number;
+export interface ICategory {
+  code: string;
   name: string;
   description: string;
   image: string;
   type: TYPE;
   subtype: SUBTYPE;
-  createdAt: Date;
+  createdAt?: Date;
 }
+
+export interface ICategoryDocument extends ICategory, Document {}

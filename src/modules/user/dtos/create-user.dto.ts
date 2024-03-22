@@ -23,4 +23,10 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   phone: string;
+
+  address: {
+    street: string;
+    city: string;
+    zip: number;
+  };
 }

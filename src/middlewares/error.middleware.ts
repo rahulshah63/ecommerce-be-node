@@ -3,8 +3,8 @@ import { HttpException, Logger } from '@nestjs/common';
 
 const errorMiddleware = (error: HttpException, req: Request, res: Response, next: NextFunction) => {
   try {
-    const status: number = error.getStatus() || 500;
-    const message: string = error.message || 'Something went wrong';
+    const status = error.getStatus ? error.getStatus() : 500;
+    const message = error.message || 'Something went wrong';
 
     const logger = new Logger();
     logger.error(`[${req.method}] ${req.path} >> StatusCode:: ${status}, Message:: ${message}`);

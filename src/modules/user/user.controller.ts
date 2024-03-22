@@ -17,18 +17,6 @@ export class UserController {
     return this.instance;
   }
 
-  // Route: POST: /v1/user/create
-  public create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const createUserDto: CreateUserDto = req.body;
-      const response = await this.userService.create(createUserDto);
-      return res.status(HttpStatus.OK).send(response);
-    } catch (error) {
-      console.error('Error in logging:', error);
-      return next(error);
-    }
-  };
-
   // Route: GET: /v1/user/me
   public getLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {

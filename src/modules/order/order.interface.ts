@@ -1,41 +1,43 @@
-import { ValueOf } from '@/utils/util';
-import { IProductDocument } from '../product/product.interface';
+import { Document, Types } from 'mongoose';
+import { IAddress } from '../user/user.interface';
 
-export const STATUS = {
-  DELIVERED: 'delivered',
-  READY_TO_SHIP: 'ready_to_ship',
-  NOT_DELIVERED: 'not_delivered',
-  ON_WAY: 'on_way',
-  DELIVERING_SOON: 'delivering_soon',
-} as const;
+export enum STATUS {
+  DELIVERED = 'delivered',
+  READY_TO_SHIP = 'ready_to_ship',
+  NOT_DELIVERED = 'not_delivered',
+  ON_WAY = 'on_way',
+  DELIVERING_SOON = 'delivering_soon',
+}
 
-export const PAYMENT_METHODS = {
-  COD: 'cod',
-  ESEWA: 'esewa',
-  KHALTI: 'khalti',
-  BANK: 'bank',
-} as const;
+export enum PAYMENT_METHODS {
+  COD = 'cod',
+  ESEWA = 'esewa',
+  KHALTI = 'khalti',
+  BANK = 'bank',
+}
 
-export const PAYMENT_STATUS = {
-  PAID: 'paid',
-  UNPAID: 'unpaid',
-} as const;
+export enum PAYMENT_STATUS {
+  PAID = 'paid',
+  UNPAID = 'unpaid',
+}
 
-export interface IOrders {
+export interface IOrder {
   trackingId: number;
   discount: number;
   charges: number;
-  //   deliveryAddress: IAddress;
-  deliveryDate: Date;
+  // deliveryAddress: IAddress;
   orderedDate: Date;
-  status: ValueOf<typeof STATUS>;
-  amount: number;
-  paymentStatus: ValueOf<typeof PAYMENT_STATUS>;
-  paymentMethod: ValueOf<typeof PAYMENT_METHODS>;
-  orderedBy: any; // ! Updated since no IUser was defined.
-  orderedItem: {
-    item: IProductDocument;
-    weight: number;
+  status: STATUS;
+  // amount: number;
+  paymentStatus: PAYMENT_STATUS;
+  paymentMethod: PAYMENT_METHODS;
+  orderedBy: Types.ObjectId; // ! Updated since no IUser was defined.
+  items: {
+    product: Types.ObjectId;
+    quantity: number;
+    price: number;
+    total: number;
   }[];
-  issue?: string;
 }
+
+export interface IOrderDocument extends IOrder, Document {}

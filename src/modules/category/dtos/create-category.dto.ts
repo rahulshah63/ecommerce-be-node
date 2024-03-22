@@ -4,10 +4,6 @@ import { TYPE, SUBTYPE } from '../category.interface';
 export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
-  code: string;
-
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsString()

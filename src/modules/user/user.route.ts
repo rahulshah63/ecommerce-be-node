@@ -14,7 +14,6 @@ class UserRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, [validationMiddleware(CreateUserDto, 'body')], UserController.create);
     this.router.get(`${this.path}/me`, UserController.getLoggedinUserDetails);
     this.router.delete(`${this.path}/me`, UserController.deleteLoggedinUserDetails);
     this.router.put(`${this.path}/:id`, UserController.updateById);

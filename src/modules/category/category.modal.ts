@@ -3,7 +3,7 @@ import { model, Schema } from 'mongoose';
 
 const CategorySchema: Schema<ICategoryDocument> = new Schema({
   code: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
     index: true,

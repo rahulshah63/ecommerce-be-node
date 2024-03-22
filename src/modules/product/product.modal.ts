@@ -7,6 +7,7 @@ export const ProductSchema: Schema<IProductDocument> = new Schema({
     ref: 'category',
     required: true,
   },
+  code: { type: String, required: true },
   slug: { type: String, required: true, unique: true, trim: true },
   price: {
     type: Number,

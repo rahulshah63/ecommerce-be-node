@@ -42,12 +42,6 @@ export class UserService extends BaseService<IUserDocument> {
 
     return user;
   }
-
-  async create(userDto: CreateUserDto): Promise<IUserDocument> {
-    const user = await this.repository.create(userDto);
-
-    return user;
-  }
 }
 
 export default UserService.getInstance();

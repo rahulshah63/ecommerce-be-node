@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install --no-fund --no-audit
 COPY . .
 RUN npm run build && npm prune --production
-
+EXPOSE 3000
 FROM gcr.io/distroless/nodejs18-debian11
 WORKDIR /usr/app
 COPY --from=build-env /usr/app/dist /usr/app/dist

@@ -7,15 +7,12 @@ import { IAddress, IUserDocument, ROLE } from './user.interface';
 const addressSchema: Schema<IAddress & Document> = new Schema({
   street: {
     type: String,
-    required: true,
   },
   city: {
     type: String,
-    required: true,
   },
   zip: {
     type: Number,
-    required: true,
   },
 });
 
@@ -43,8 +40,6 @@ const UserSchema: Schema<IUserDocument> = new Schema({
   },
 });
 
-const UserModel = model('user', UserSchema);
-
 UserSchema.pre<IUserDocument>('save', function (next: NextFunction) {
   if (!this.isModified('password')) {
     return next();
@@ -65,5 +60,7 @@ UserSchema.pre<IUserDocument>('save', function (next: NextFunction) {
     });
   });
 });
+
+const UserModel = model('user', UserSchema);
 
 export default UserModel;

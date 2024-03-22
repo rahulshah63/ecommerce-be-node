@@ -28,6 +28,7 @@ export class ProductService extends BaseService<IProductDocument> {
   async create(createProductDto: CreateProductDto): Promise<IProductDocument> {
     const data = {
       ...createProductDto,
+      code: `product-${Date.now()}`,
       slug: slugify(createProductDto.category + Date.now(), {
         replacement: '-',
         remove: /[*+~.()'"!:@]/g,

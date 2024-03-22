@@ -7,9 +7,11 @@ export enum TokenTypes {
   VERIFY_EMAIL = 'verifyEmail',
 }
 
-export interface ITokenDocument extends Document {
+export interface IToken {
   token: string;
   user: any;
   expires: Date;
   type: TokenTypes;
 }
+
+export interface ITokenDocument extends IToken, Document {}

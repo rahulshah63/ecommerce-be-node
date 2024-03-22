@@ -10,6 +10,7 @@ const AppConfig = {
   credential: Boolean(parseInt(process.env.CREDENTIALS)),
   log_format: process.env.LOG_FORMAT,
   origin: process.env.ORIGIN,
+  secret: process.env.SECRET,
 } as const;
 
 export default AppConfig;

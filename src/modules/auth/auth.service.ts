@@ -267,9 +267,7 @@ export class AuthService {
   public async register(registrationData: RegisterDto) {
     await this.userExistance(registrationData.email);
 
-    const createdUser = await this.userRepository.create({
-      ...registrationData,
-    });
+    const createdUser = await this.userRepository.create(registrationData);
 
     createdUser.password = undefined;
 
