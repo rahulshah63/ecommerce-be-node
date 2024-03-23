@@ -23,7 +23,6 @@ export class CategoryController {
       const createProductDto: CreateCategoryDto = req.body;
       const response = await this.categoryService.create({
         ...createProductDto,
-        code: `category-${Date.now()}`,
         image: 'N/A',
       });
       return res.status(HttpStatus.OK).send(response);
@@ -61,7 +60,7 @@ export class CategoryController {
     try {
       const { id } = req.params;
       const data = req.body;
-      const response = await this.categoryService.updateOne({ _id: id }, data);
+      const response = await this.categoryService.updateById(id, data);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Controller, HttpStatus } from '@nestjs/common';
 import OrderService from './order.service';
 import { CreateOrderDto } from './dtos/create-order.dto';
+import { IUserDocument } from '../user/user.interface';
 
 @Controller('order')
 export class OrderController {
@@ -21,7 +22,19 @@ export class OrderController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const createProductDto: CreateOrderDto = req.body;
-      const response = await this.orderService.create(createProductDto);
+      const response = await this.orderService.addOrder(createProductDto, req.user as IUserDocument);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      return next(error);
+    }
+  };
+
+  // Route: GET: /v1/order/track/:trackingId
+  public trackOrder = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { trackingId } = req.params;
+      const response = await this.orderService.getOrder(trackingId, req.user as IUserDocument);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
@@ -57,7 +70,7 @@ export class OrderController {
     try {
       const { id } = req.params;
       const data = req.body;
-      const response = await this.orderService.updateOne({ _id: id }, data);
+      const response = await this.orderService.updateById(id, data);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

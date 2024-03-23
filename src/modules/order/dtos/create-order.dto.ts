@@ -1,5 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { PAYMENT_METHODS } from '../order.interface';
+import { IsArray, IsNotEmpty } from 'class-validator';
 
 export class CreateOrderDto {
   // @IsString()
@@ -7,10 +6,10 @@ export class CreateOrderDto {
   // @IsEnum(PAYMENT_METHODS)
   // paymentMethod: PAYMENT_METHODS;
 
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
   items: {
-    productCode: string;
+    productId: string;
     quantity: number;
   }[];
 }

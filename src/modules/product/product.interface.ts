@@ -1,4 +1,3 @@
-import { ICategoryDocument } from '@/modules/category/category.interface';
 import { Document, Types } from 'mongoose';
 
 export enum AVAILABILITY {
@@ -10,13 +9,13 @@ export enum AVAILABILITY {
 }
 
 export interface IProduct {
-  category: ICategoryDocument;
-  code: string;
+  category: Types.ObjectId;
   slug: string;
   image: string;
   price: number;
   quantity: number;
-  stock: AVAILABILITY;
+  sold?: number;
+  stock?: AVAILABILITY;
   seller: Types.ObjectId;
 }
 

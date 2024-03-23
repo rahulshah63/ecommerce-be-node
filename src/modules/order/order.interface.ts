@@ -28,7 +28,6 @@ export interface IOrder {
   // deliveryAddress: IAddress;
   orderedDate: Date;
   status: STATUS;
-  // amount: number;
   paymentStatus: PAYMENT_STATUS;
   paymentMethod: PAYMENT_METHODS;
   orderedBy: Types.ObjectId; // ! Updated since no IUser was defined.

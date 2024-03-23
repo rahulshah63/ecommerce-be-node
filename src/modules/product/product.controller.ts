@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Controller, HttpStatus } from '@nestjs/common';
 import ProductService from './product.service';
 import { CreateProductDto } from './dtos/create-product.dto';
+import { IUserDocument } from '../user/user.interface';
 
 @Controller('product')
 export class ProductController {
@@ -21,7 +22,7 @@ export class ProductController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const createProductDto: CreateProductDto = req.body;
-      const response = await this.productService.create(createProductDto);
+      const response = await this.productService.addProduct(createProductDto, req.user as IUserDocument);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

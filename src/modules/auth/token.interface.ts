@@ -9,7 +9,7 @@ export enum TokenTypes {
 
 export interface IToken {
   token: string;
-  user: any;
+  user: Types.ObjectId;
   expires: Date;
   type: TokenTypes;
 }

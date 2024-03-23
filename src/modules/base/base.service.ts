@@ -33,6 +33,28 @@ export abstract class BaseService<T> implements IBaseService<Document> {
     return await this.repository.find(filter);
   }
 
+  async updateById(id: string | Types.ObjectId, data: any) {
+    const item = await this.repository.findById(id);
+
+    if (!item) {
+      throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
+    }
+
+    if (data) {
+      Object.keys(data).forEach(key => {
+        if (data[key] === '') {
+          delete data[key];
+        } else {
+          item[key] = data[key];
+        }
+      });
+
+      data = item;
+    }
+
+    return await this.repository.updateOne({ _id: id }, data);
+  }
+
   async updateOne(filter: object, update: object): Promise<any> {
     const result = await this.repository.updateOne(filter, update, {
       upsert: true,

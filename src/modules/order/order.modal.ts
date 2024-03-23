@@ -1,5 +1,5 @@
 import { IOrderDocument, PAYMENT_METHODS, PAYMENT_STATUS, STATUS } from './order.interface';
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 export const orderSchema: Schema<IOrderDocument> = new Schema({
   trackingId: {
@@ -18,10 +18,6 @@ export const orderSchema: Schema<IOrderDocument> = new Schema({
   },
   orderedDate: { type: Date, default: Date.now },
   status: { type: String, enum: Object.values(STATUS), default: STATUS.READY_TO_SHIP },
-  // amount: {
-  //   type: Number,
-  //   required: true,
-  // },
   paymentStatus: { type: String, enum: Object.values(PAYMENT_STATUS), default: PAYMENT_STATUS.UNPAID },
   paymentMethod: { type: String, enum: Object.values(PAYMENT_METHODS), default: PAYMENT_METHODS.COD },
   orderedBy: {
@@ -32,7 +28,7 @@ export const orderSchema: Schema<IOrderDocument> = new Schema({
   items: {
     type: [
       {
-        product: { type: Types.ObjectId, ref: 'product', required: true },
+        product: { type: Schema.Types.ObjectId, ref: 'product', required: true },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
         total: { type: Number, required: true },

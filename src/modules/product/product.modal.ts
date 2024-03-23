@@ -7,7 +7,6 @@ export const ProductSchema: Schema<IProductDocument> = new Schema({
     ref: 'category',
     required: true,
   },
-  code: { type: String, required: true },
   slug: { type: String, required: true, unique: true, trim: true },
   price: {
     type: Number,
@@ -18,9 +17,13 @@ export const ProductSchema: Schema<IProductDocument> = new Schema({
   },
   quantity: {
     type: Number,
-    default: undefined,
+    required: true,
   },
-  stock: { type: String, enum: Object.values(AVAILABILITY), required: true },
+  sold: {
+    type: Number,
+    default: 0,
+  },
+  stock: { type: String, enum: Object.values(AVAILABILITY), default: AVAILABILITY.IN_STOCK },
   seller: {
     type: Schema.Types.ObjectId,
     ref: 'user',

@@ -33,6 +33,7 @@ const UserSchema: Schema<IUserDocument> = new Schema({
   phone: {
     type: String,
     unique: true,
+    sparse: true,
   },
   address: addressSchema,
   role: { type: String, enum: Object.values(ROLE), default: ROLE.CONSUMER },

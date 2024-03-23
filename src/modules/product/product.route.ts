@@ -4,6 +4,8 @@ import { AppConfig } from '@/config';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Routes } from '@/interfaces/routes.interface';
 import { CreateProductDto } from './dtos/create-product.dto';
+import { adminOnly, producerOnly } from '@/middlewares/access.middleware';
+import authMiddleware from '@/middlewares/auth.middleware';
 
 class ProductRoute implements Routes {
   public path = `/${AppConfig.versioning}/product`;
@@ -14,9 +16,17 @@ class ProductRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, [validationMiddleware(CreateProductDto, 'body')], ProductController.create);
+    this.router.post(
+      `${this.path}/create`,
+      [validationMiddleware(CreateProductDto, 'body'), authMiddleware, producerOnly()],
+      ProductController.create,
+    );
     this.router.get(`${this.path}/all`, ProductController.findAll);
-    this.router.route(`${this.path}/:id`).get(ProductController.findById).put(ProductController.updateById).delete(ProductController.deleteById);
+    this.router
+      .route(`${this.path}/:id`)
+      .get(ProductController.findById)
+      .put([authMiddleware, producerOnly()], ProductController.updateById)
+      .delete([authMiddleware, adminOnly()], ProductController.deleteById);
   }
 }
 

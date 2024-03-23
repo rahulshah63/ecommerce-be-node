@@ -1,5 +1,4 @@
 import { Types } from 'mongoose';
-import slugify from 'slugify';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MessagesMapping } from '@/config/messages-mapping';
 import { BaseService } from '../base/base.service';
@@ -8,8 +7,8 @@ import { CreateOrderDto } from './dtos/create-order.dto';
 import { IOrderDocument } from './order.interface';
 import ProductService from '../product/product.service';
 import httpStatus from 'http-status';
-import { AVAILABILITY } from '../product/product.interface';
-import { IUser, ROLE } from '../user/user.interface';
+import { AVAILABILITY, IProductDocument } from '../product/product.interface';
+import { IUserDocument, ROLE } from '../user/user.interface';
 
 @Injectable()
 export class OrderService extends BaseService<IOrderDocument> {
@@ -29,7 +28,7 @@ export class OrderService extends BaseService<IOrderDocument> {
     return this.instance;
   }
 
-  async addOrder(createOrderDTO: CreateOrderDto, userId: string): Promise<IOrderDocument> {
+  async addOrder(createOrderDTO: CreateOrderDto, user: IUserDocument): Promise<IOrderDocument> {
     const { items } = createOrderDTO;
     // const cart = await this.cartService.findOne({ user: userId });
 
@@ -37,26 +36,26 @@ export class OrderService extends BaseService<IOrderDocument> {
     //   throw new HttpException(MessagesMapping['#16'], HttpStatus.NOT_FOUND);
     // }
 
-    const orderedItems = items.map(async ({ productCode, quantity }) => {
-      const product = await ProductService.findOne({ code: productCode });
+    const itemList = items.map(async ({ productId, quantity }) => {
+      const product: IProductDocument = await ProductService.findById(productId);
       if (!product) throw new HttpException('Product not found', httpStatus.NOT_FOUND);
       if (product.stock === AVAILABILITY.OUT_STOCK) throw new HttpException('Currently out of stock', httpStatus.NOT_FOUND);
       const { price } = product;
+      console.log({ product: product._id, quantity, price, total: price * quantity });
       return { product: product._id, quantity, price, total: price * quantity };
     });
 
-    Promise.all(orderedItems);
+    const orderedItems = await Promise.all(itemList);
 
     const order = await this.repository.create({
       items: orderedItems,
-      orderedBy: userId,
-      trackingId: `trackId-${Date.now()}`,
+      orderedBy: user._id,
+      trackingId: Date.now(),
     });
 
     for (const item of orderedItems) {
-      const { product, total } = await item;
-
-      // await this.productService.updateById(id, { sold, quantity });
+      const { product, quantity } = item;
+      await ProductService.updateOne({ _id: product }, { $inc: { sold: quantity, quantity: -quantity } });
     }
 
     // await this.cartService.deleteCart(userID);
@@ -64,19 +63,56 @@ export class OrderService extends BaseService<IOrderDocument> {
     return order;
   }
 
-  async getOrder(user: IUser, id: Types.ObjectId | string) {
-    if (user.role === ROLE.ADMIN || user.role === ROLE.PRODUCER) {
-      const orders = await this.findById(id);
+  public async changeOrderStatus(id: Types.ObjectId | string, status: string) {
+    if (!['Not Processed', 'Processing', 'Shipped', 'Delivered'].includes(status)) {
+      throw new HttpException(MessagesMapping['#26'], HttpStatus.BAD_REQUEST);
+    }
 
+    const order = await this.findById(id);
+
+    // if (status === 'Cancelled') {
+    //   for (const item of order.items) {
+    //     const product = await ProductService.findById(item.product);
+
+    //     await this.productService.updateById(item.product, {
+    //       quantity: product.quantity + item.totalProductQuantity,
+    //       sold: product.sold - item.totalProductQuantity,
+    //     });
+    //   }
+
+    //   await this.deleteById(id);
+
+    //   return {
+    //     type: 'Success',
+    //     message: 'successfulOrderCancel',
+    //     statusCode: 200,
+    //   };
+    // }
+
+    order.status = status;
+
+    await order.save();
+
+    return {
+      type: 'Success',
+      message: 'successfulStatusUpdate',
+      statusCode: 200,
+    };
+  }
+
+  async getOrder(trackingId: string, user: IUserDocument) {
+    const order = await this.findOne({ trackingId });
+    if (!order) throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
+
+    if (user.role === ROLE.ADMIN || user.role === ROLE.PRODUCER) {
       return {
         type: 'Success',
         message: 'successfulOrdersFound',
         statusCode: 200,
-        orders,
+        order,
       };
     }
-    const order = await this.findById(id);
-
+    if (String(order.orderedBy) !== String(user._id)) throw new HttpException(MessagesMapping['#24'], httpStatus.FORBIDDEN);
     return {
       type: 'Success',
       message: 'successfulOrderFound',

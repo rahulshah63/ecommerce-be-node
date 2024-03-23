@@ -11,7 +11,6 @@ export enum SUBTYPE {
 }
 
 export interface ICategory {
-  code: string;
   name: string;
   description: string;
   image: string;

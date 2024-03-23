@@ -1,9 +1,8 @@
-import { IsNotEmpty, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { AVAILABILITY } from '../product.interface';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   category: string;
 
   @IsString()
@@ -17,13 +16,4 @@ export class CreateProductDto {
   @IsNumber()
   @IsNotEmpty()
   quantity: string;
-
-  @IsString()
-  @IsNotEmpty()
-  description: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(AVAILABILITY)
-  role: AVAILABILITY;
 }

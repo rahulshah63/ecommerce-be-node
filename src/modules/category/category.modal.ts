@@ -2,12 +2,6 @@ import { ICategoryDocument, SUBTYPE, TYPE } from './category.interface';
 import { model, Schema } from 'mongoose';
 
 const CategorySchema: Schema<ICategoryDocument> = new Schema({
-  code: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true,
-  },
   name: {
     type: String,
     required: true,

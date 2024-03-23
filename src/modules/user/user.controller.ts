@@ -33,7 +33,7 @@ export class UserController {
   // Route: DELETE: /v1/user/me
   public deleteLoggedinUserDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { user }: any = req;
+      const user = req.user as unknown as IUserDocument;
       const response = await this.userService.deleteLoggedinUserDetails(user._id);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
@@ -47,7 +47,7 @@ export class UserController {
     try {
       const { userId } = req.params;
       const data = req.body;
-      const response = await this.userService.updateOne({ _id: userId }, data);
+      const response = await this.userService.updateById(userId, data);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

@@ -5,7 +5,8 @@ import { MessagesMapping } from '@/config/messages-mapping';
 import { BaseService } from '../base/base.service';
 import ProductModel from './product.modal';
 import { CreateProductDto } from './dtos/create-product.dto';
-import { IProductDocument } from './product.interface';
+import { IProduct, IProductDocument } from './product.interface';
+import { IUser, IUserDocument } from '../user/user.interface';
 
 @Injectable()
 export class ProductService extends BaseService<IProductDocument> {
@@ -25,39 +26,17 @@ export class ProductService extends BaseService<IProductDocument> {
     return this.instance;
   }
 
-  async create(createProductDto: CreateProductDto): Promise<IProductDocument> {
+  async addProduct(createProductDto: CreateProductDto, user: IUserDocument): Promise<IProductDocument> {
     const data = {
       ...createProductDto,
-      code: `product-${Date.now()}`,
       slug: slugify(createProductDto.category + Date.now(), {
         replacement: '-',
         remove: /[*+~.()'"!:@]/g,
         lower: true,
       }),
+      seller: user._id satisfies Types.ObjectId,
     };
     return this.repository.create(data);
-  }
-
-  async updateById(id: string | Types.ObjectId, data: any) {
-    const item = await this.repository.findById(id);
-
-    if (!item) {
-      throw new HttpException(MessagesMapping['#14'], HttpStatus.NOT_FOUND);
-    }
-
-    if (data) {
-      Object.keys(data).forEach(key => {
-        if (data[key] === '') {
-          delete data[key];
-        } else {
-          item[key] = data[key];
-        }
-      });
-
-      data = item;
-    }
-
-    return await this.repository.updateOne({ _id: id }, data);
   }
 }
 
