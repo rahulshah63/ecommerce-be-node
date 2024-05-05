@@ -1,10 +1,9 @@
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '@nestjs/common';
 import httpStatus from 'http-status';
 import { MessagesMapping } from '@/config/messages-mapping';
 import AuthConfig from '@/config/auth.config.js';
-import UserService from '@/modules/user/user.service';
 import { IUser } from '@/modules/user/user.interface';
 const authMiddleware = async (
   req: Request & {
@@ -13,7 +12,7 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.cookies.jwt || req.headers.authorization;
+  const token = req.cookies.jwt || req.headers.authorization.split(' ')[1];
   if (token) {
     try {
       const decoded = verify(token, AuthConfig.accessToken.secretKey);
