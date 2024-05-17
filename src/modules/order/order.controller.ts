@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Controller, HttpStatus } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus } from '@nestjs/common';
 import OrderService from './order.service';
 import { CreateOrderDto } from './dtos/create-order.dto';
 import { IUserDocument } from '../user/user.interface';
@@ -35,6 +35,18 @@ export class OrderController {
     try {
       const { trackingId } = req.params;
       const response = await this.orderService.getOrder(trackingId, req.user as IUserDocument);
+      return res.status(HttpStatus.OK).send(response);
+    } catch (error) {
+      console.error('Error in logging:', error);
+      return next(error);
+    }
+  };
+
+  // Route: GET: /v1/order/track/:trackingId
+  public trackOrderByUserId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.orderService.repository.find({ orderedBy: (req.user as IUserDocument)._id });
+      if (response.length === 0) throw new HttpException('No order found', HttpStatus.NOT_FOUND);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);
