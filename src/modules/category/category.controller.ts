@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Controller, HttpStatus } from '@nestjs/common';
 import CategoryService from './category.service';
 import { CreateCategoryDto } from './dtos/create-category.dto';
+import AWSS3ervice from '@/services/s3.service';
 
 @Controller('category')
 export class CategoryController {
@@ -20,10 +21,13 @@ export class CategoryController {
   // Route: POST: /v1/category/create
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const createProductDto: CreateCategoryDto = req.body;
+      const createCategoryDto: CreateCategoryDto = req.body;
+
+      const { imageUrl } = await AWSS3ervice.getInstance().uploadBase64(createCategoryDto.image, `${createCategoryDto.name}-${Date.now()}.png`);
+
       const response = await this.categoryService.create({
-        ...createProductDto,
-        image: 'N/A',
+        ...createCategoryDto,
+        image: imageUrl,
       });
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {

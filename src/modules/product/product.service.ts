@@ -1,12 +1,11 @@
 import { Types } from 'mongoose';
 import slugify from 'slugify';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { MessagesMapping } from '@/config/messages-mapping';
+import { Injectable } from '@nestjs/common';
 import { BaseService } from '../base/base.service';
 import ProductModel from './product.modal';
 import { CreateProductDto } from './dtos/create-product.dto';
-import { IProduct, IProductDocument } from './product.interface';
-import { IUser, IUserDocument } from '../user/user.interface';
+import { IProductDocument } from './product.interface';
+import { IUserDocument } from '../user/user.interface';
 
 @Injectable()
 export class ProductService extends BaseService<IProductDocument> {

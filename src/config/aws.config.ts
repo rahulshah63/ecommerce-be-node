@@ -6,10 +6,11 @@ const AWSConfig = {
   credential: {
     key: process.env.AWS_CREDENTIAL_KEY,
     secret: process.env.AWS_CREDENTIAL_SECRET,
+    region: process.env.AWS_REGION,
   },
   s3: {
     bucket: process.env.AWS_S3_BUCKET,
-    region: process.env.AWS_S3_REGION,
+    region: process.env.AWS_S3_REGION || '',
     baseUrl: process.env.AWS_S3_BASE_URL,
   },
 } as const;

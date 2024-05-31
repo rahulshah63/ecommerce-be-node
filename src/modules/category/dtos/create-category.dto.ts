@@ -12,6 +12,10 @@ export class CreateCategoryDto {
 
   @IsString()
   @IsNotEmpty()
+  image: string;
+
+  @IsString()
+  @IsNotEmpty()
   @IsEnum(TYPE)
   type: TYPE;
 

@@ -3,6 +3,7 @@ import { Controller, HttpStatus } from '@nestjs/common';
 import ProductService from './product.service';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { IUserDocument } from '../user/user.interface';
+import AWSS3ervice from '@/services/s3.service';
 
 @Controller('product')
 export class ProductController {
@@ -22,6 +23,10 @@ export class ProductController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const createProductDto: CreateProductDto = req.body;
+      if (createProductDto.image) {
+        const { imageUrl } = await AWSS3ervice.getInstance().uploadBase64(createProductDto.image, `product-${Date.now()}.png`);
+        createProductDto.image = imageUrl;
+      }
       const response = await this.productService.addProduct(createProductDto, req.user as IUserDocument);
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
