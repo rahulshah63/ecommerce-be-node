@@ -19,6 +19,7 @@ export interface IUser {
   role: ROLE;
   phone: string;
   address: IAddress;
+  loginMethod: 'local' | 'google';
 }
 
 export interface IUserDocument extends IUser, Document {}

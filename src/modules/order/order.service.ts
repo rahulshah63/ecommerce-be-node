@@ -30,18 +30,12 @@ export class OrderService extends BaseService<IOrderDocument> {
 
   async addOrder(createOrderDTO: CreateOrderDto, user: IUserDocument): Promise<IOrderDocument> {
     const { items } = createOrderDTO;
-    // const cart = await this.cartService.findOne({ user: userId });
-
-    // if (cart.items.length === 0) {
-    //   throw new HttpException(MessagesMapping['#16'], HttpStatus.NOT_FOUND);
-    // }
 
     const itemList = items.map(async ({ productId, quantity }) => {
       const product: IProductDocument = await ProductService.findById(productId);
       if (!product) throw new HttpException('Product not found', httpStatus.NOT_FOUND);
       if (product.stock === AVAILABILITY.OUT_STOCK) throw new HttpException('Currently out of stock', httpStatus.NOT_FOUND);
       const { price } = product;
-      console.log({ product: product._id, quantity, price, total: price * quantity });
       return { product: product._id, quantity, price, total: price * quantity };
     });
 
@@ -55,7 +49,7 @@ export class OrderService extends BaseService<IOrderDocument> {
 
     for (const item of orderedItems) {
       const { product, quantity } = item;
-      await ProductService.updateOne({ _id: product }, { $inc: { sold: quantity, quantity: -quantity } });
+      await ProductService.updateOne({ _id: product }, { $inc: { sold: quantity } });
     }
 
     // await this.cartService.deleteCart(userID);

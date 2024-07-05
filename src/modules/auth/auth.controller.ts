@@ -9,7 +9,8 @@ import { TokenDto } from './dtos/token.dto';
 
 import AuthService from './auth.service';
 import { NextFunction, Request, Response } from 'express';
-import axios from 'axios';
+import { AppConfig } from '@/config';
+import passport from 'passport';
 
 @Controller('auth')
 export class AuthController {
@@ -29,9 +30,17 @@ export class AuthController {
   //forward the request to goggle's authentication server
   public googleAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await axios.get('https://accounts.google.com/o/oauth2/v2/auth', {
-        params: req.query,
-      });
+      console.log('called api', req.user);
+      const user = {
+        email: (req.user as any).email,
+        name: (req.user as any).firstName + (req.user as any).lastName,
+      };
+
+      const response = await this.authService.loginGoogleUser(user as RegisterDto);
+      // axios.get('https://accounts.google.com/o/oauth2/v2/token', {
+      //   params: req.query,
+      // });
+
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       console.error('Error in logging:', error);

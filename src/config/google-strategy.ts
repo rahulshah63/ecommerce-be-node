@@ -1,4 +1,5 @@
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { AppConfig } from '@/config';
 
 export class GoogleStrategy extends Strategy {
   constructor() {
@@ -6,7 +7,7 @@ export class GoogleStrategy extends Strategy {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_SECRET,
-        callbackURL: '/auth/google/redirect',
+        callbackURL: `/${AppConfig.versioning}/auth/google/redirect`,
         scope: ['email', 'profile'],
       },
       GoogleStrategy.validate,
@@ -20,7 +21,10 @@ export class GoogleStrategy extends Strategy {
       firstName: name.givenName,
       lastName: name.familyName,
       accessToken,
+      refreshToken,
     };
+    console.log({ user });
+
     done(null, user);
   }
 }

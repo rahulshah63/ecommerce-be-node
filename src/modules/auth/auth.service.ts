@@ -172,6 +172,20 @@ export class AuthService {
     return user;
   }
 
+  private async getGoogleUser(loginDto: LoginDto): Promise<IUserDocument> {
+    const user = await this.userRepository.findOne({
+      email: loginDto.email,
+    });
+
+    if (user && user.loginMethod === 'google') {
+      return user;
+    } else if (user && user.loginMethod !== 'google') {
+      throw new HttpException(MessagesMapping['#27'], HttpStatus.CONFLICT);
+    } else {
+      return await this.userRepository.create(loginDto);
+    }
+  }
+
   public async resetPassword(resetPasswordDto: ResetPasswordDto, token: string) {
     const { password, passwordConfirmation } = resetPasswordDto;
 
@@ -213,6 +227,22 @@ export class AuthService {
 
   public async login(loginDto: LoginDto) {
     const user = await this.getAuthenticatedUser(loginDto.email, loginDto.password);
+
+    await this.refreshTokenExistance(user);
+
+    const tokens = await this.generateAuthTokens(user);
+
+    return {
+      type: 'success',
+      statusCode: 200,
+      message: MessagesMapping['#10'],
+      user,
+      tokens,
+    };
+  }
+
+  public async loginGoogleUser(loginDto: LoginDto) {
+    const user = await this.getGoogleUser(loginDto);
 
     await this.refreshTokenExistance(user);
 

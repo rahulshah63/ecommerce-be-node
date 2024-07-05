@@ -13,7 +13,7 @@ export interface IProduct {
   slug: string;
   image: string;
   price: number;
-  quantity: number;
+  // quantity: number;
   sold?: number;
   stock?: AVAILABILITY;
   seller: Types.ObjectId;

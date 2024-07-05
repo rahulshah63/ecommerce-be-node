@@ -24,4 +24,5 @@ export const MessagesMapping = {
   '#24': 'You are not authorized to perform this action',
   '#25': 'You have already reviewed this product',
   '#26': 'Order status is not valid',
+  '#27': 'User email is already in use.',
 };
