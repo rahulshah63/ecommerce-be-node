@@ -20,9 +20,10 @@ export const orderSchema: Schema<IOrderDocument> = new Schema({
   status: { type: String, enum: Object.values(STATUS), default: STATUS.READY_TO_SHIP },
   paymentStatus: { type: String, enum: Object.values(PAYMENT_STATUS), default: PAYMENT_STATUS.UNPAID },
   paymentMethod: { type: String, enum: Object.values(PAYMENT_METHODS), default: PAYMENT_METHODS.COD },
-  orderedBy: {
+ orderedBy: {
     type: Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'User',
+    autopopulate: true,
     required: true,
   },
   items: {
