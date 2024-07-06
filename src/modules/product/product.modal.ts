@@ -15,10 +15,6 @@ export const ProductSchema: Schema<IProductDocument> = new Schema({
   image: {
     type: String,
   },
-  quantity: {
-    type: Number,
-    required: true,
-  },
   sold: {
     type: Number,
     default: 0,

@@ -12,7 +12,6 @@ const CategorySchema: Schema<ICategoryDocument> = new Schema({
   },
   image: {
     type: String,
-    required: true,
   },
   type: { type: String, enum: Object.values(TYPE), required: true },
   subtype: { type: String, enum: Object.values(SUBTYPE), required: true },

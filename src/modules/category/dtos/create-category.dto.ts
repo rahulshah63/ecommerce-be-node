@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { TYPE, SUBTYPE } from '../category.interface';
 
 export class CreateCategoryDto {
@@ -11,7 +11,7 @@ export class CreateCategoryDto {
   description: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   image: string;
 
   @IsString()
