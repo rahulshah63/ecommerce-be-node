@@ -19,7 +19,7 @@ class OrderRoute implements Routes {
     this.router.post(`${this.path}/create`, [validationMiddleware(CreateOrderDto, 'body'), authMiddleware], OrderController.create);
     this.router.get(`${this.path}/all`, [authMiddleware, adminOnly()], OrderController.findAll);
     this.router.get(`${this.path}/track/:trackingId`, [authMiddleware], OrderController.trackOrder);
-    this.router.get(`${this.path}/track/user`, [authMiddleware], OrderController.trackOrderByUserId);
+    this.router.get(`${this.path}/me`, [authMiddleware], OrderController.trackOrderByUserId);
     this.router
       .route(`${this.path}/:id`)
       .get([authMiddleware, producerOnly()], OrderController.findById)
