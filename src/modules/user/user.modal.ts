@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { Document, model, Schema } from 'mongoose';
 import { NextFunction } from 'express';
 
-import { IAddress, IUserDocument, ROLE } from './user.interface';
+import { IAddress, IUserDocument, LoginMethod, ROLE } from './user.interface';
 
 const addressSchema: Schema<IAddress & Document> = new Schema({
   street: {
@@ -37,6 +37,7 @@ const UserSchema: Schema<IUserDocument> = new Schema({
   },
   address: addressSchema,
   role: { type: String, enum: Object.values(ROLE), default: ROLE.CONSUMER },
+  loginMethod: { type: String, enum: Object.values(LoginMethod), default: LoginMethod.LOCAL },
 });
 
 UserSchema.pre<IUserDocument>('save', function (next: NextFunction) {

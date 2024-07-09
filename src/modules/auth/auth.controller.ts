@@ -10,6 +10,7 @@ import { TokenDto } from './dtos/token.dto';
 import AuthService from './auth.service';
 import { NextFunction, Request, Response } from 'express';
 import { AppConfig } from '@/config';
+import { LoginMethod } from '../user/user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -33,9 +34,10 @@ export class AuthController {
       const user = {
         email: (req.user as any).email,
         name: (req.user as any).firstName + (req.user as any).lastName,
+        loginMethod: LoginMethod.GOOGLE,
       };
 
-      const response = await this.authService.loginGoogleUser(user as RegisterDto);
+      const response = await this.authService.loginGoogleUser(user as RegisterDto & { loginMethod: string });
 
       // return res.status(HttpStatus.OK).send(response);
       const redirectUrl = `${AppConfig.client_url}/auth/google/success?response=${encodeURIComponent(JSON.stringify(response))}`;

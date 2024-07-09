@@ -6,6 +6,11 @@ export enum ROLE {
   ADMIN = 'admin',
 }
 
+export enum LoginMethod {
+  LOCAL = 'local',
+  GOOGLE = 'google',
+}
+
 export interface IAddress {
   street: string;
   city: string;
@@ -19,7 +24,7 @@ export interface IUser {
   role: ROLE;
   phone: string;
   address: IAddress;
-  loginMethod: 'local' | 'google';
+  loginMethod: LoginMethod;
 }
 
 export interface IUserDocument extends IUser, Document {}
