@@ -1,19 +1,18 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import AWS from 'aws-sdk';
 import { AWSConfig } from '@/config';
 
 class AWSS3ervice {
   private static instance: AWSS3ervice;
-  private client: S3Client;
+  private s3: AWS.S3;
   private bucketName: string;
 
   constructor() {
-    if (!AWSConfig.s3.region) {
-      throw new Error('S3: Missing S3 region');
-    }
-
-    this.client = new S3Client({
+    AWS.config.update({
       region: AWSConfig.s3.region,
+      accessKeyId: AWSConfig.access_key,
+      secretAccessKey: AWSConfig.secret,
     });
+    this.s3 = new AWS.S3();
 
     this.bucketName = AWSConfig.s3.bucket;
   }
@@ -24,18 +23,17 @@ class AWSS3ervice {
 
     const params = {
       Bucket: this.bucketName,
-      Key: `avatars/${fileName}`,
+      Key: fileName,
       Body: base64Data,
       ContentEncoding: 'base64',
       ContentType: `image/${type}`,
-      // ACL: 'public-read',
+      ACL: 'public-read',
     };
 
     try {
-      const command = new PutObjectCommand(params);
-      const result = await this.client.send(command);
+      await this.s3.putObject(params).promise();
 
-      return { ...result, imageUrl: `${AWSConfig.s3.baseUrl}/${fileName}` };
+      return { imageUrl: `https://${this.bucketName}.s3.${AWSConfig.s3.region}.amazonaws.com/${params.Key}` };
     } catch (error) {
       console.error(error);
       throw error;
