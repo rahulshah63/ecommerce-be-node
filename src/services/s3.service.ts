@@ -7,12 +7,12 @@ class AWSS3ervice {
   private bucketName: string;
 
   constructor() {
-    if (!(AWSConfig.s3.region || AWSConfig.credential.region)) {
+    if (!AWSConfig.s3.region) {
       throw new Error('S3: Missing S3 region');
     }
 
     this.client = new S3Client({
-      region: AWSConfig.s3.region || AWSConfig.credential.region,
+      region: AWSConfig.s3.region,
     });
 
     this.bucketName = AWSConfig.s3.bucket;
