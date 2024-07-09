@@ -10,7 +10,6 @@ import { TokenDto } from './dtos/token.dto';
 import AuthService from './auth.service';
 import { NextFunction, Request, Response } from 'express';
 import { AppConfig } from '@/config';
-import passport from 'passport';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +27,7 @@ export class AuthController {
 
   // Route: GET: /v1/auth/google
   //forward the request to goggle's authentication server
-  public googleAuth = async (req: Request, res: Response, next: NextFunction) => {
+  public googleAuth = async (req: Request, res: Response) => {
     try {
       console.log('called api', req.user);
       const user = {
@@ -37,14 +36,15 @@ export class AuthController {
       };
 
       const response = await this.authService.loginGoogleUser(user as RegisterDto);
-      // axios.get('https://accounts.google.com/o/oauth2/v2/token', {
-      //   params: req.query,
-      // });
 
-      return res.status(HttpStatus.OK).send(response);
-    } catch (error) {
+      // return res.status(HttpStatus.OK).send(response);
+      const redirectUrl = `${AppConfig.client_url}/auth/google/success?response=${encodeURIComponent(JSON.stringify(response))}`;
+      return res.redirect(redirectUrl);
+    } catch (error: any) {
       console.error('Error in logging:', error);
-      return next(error);
+      // return res.status(HttpStatus.OK).send(response);
+      const redirectUrl = `${AppConfig.client_url}/auth/google/failed?error=${encodeURIComponent(JSON.stringify(error.message))}`;
+      return res.redirect(redirectUrl);
     }
   };
 

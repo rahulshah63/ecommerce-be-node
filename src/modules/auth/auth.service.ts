@@ -180,7 +180,7 @@ export class AuthService {
     if (user && user.loginMethod === 'google') {
       return user;
     } else if (user && user.loginMethod !== 'google') {
-      throw new HttpException(MessagesMapping['#27'], HttpStatus.CONFLICT);
+      throw new Error(MessagesMapping['#27']);
     } else {
       return await this.userRepository.create(loginDto);
     }
