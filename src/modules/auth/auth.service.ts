@@ -12,7 +12,7 @@ import { RegisterDto } from './dtos/register.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { TokenDto } from './dtos/token.dto';
 import UserModel from '../user/user.modal';
-import { IUserDocument } from '../user/user.interface';
+import { IUserDocument, LoginMethod } from '../user/user.interface';
 import { ITokenDocument, TokenTypes } from './token.interface';
 import TokenModal from './token.modal';
 import { MailService } from '@/services/mail.service';
@@ -177,9 +177,9 @@ export class AuthService {
       email: loginDto.email,
     });
 
-    if (user && user.loginMethod === 'google') {
+    if (user && user.loginMethod === LoginMethod.GOOGLE) {
       return user;
-    } else if (user && user.loginMethod !== 'google') {
+    } else if (user && user.loginMethod === LoginMethod.LOCAL) {
       throw new Error(MessagesMapping['#27']);
     } else {
       return await this.userRepository.create(loginDto);
