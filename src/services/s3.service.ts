@@ -9,11 +9,12 @@ class AWSS3ervice {
   constructor() {
     AWS.config.update({
       region: AWSConfig.s3.region,
-      accessKeyId: AWSConfig.access_key,
-      secretAccessKey: AWSConfig.secret,
+      credentials: {
+        accessKeyId: AWSConfig.access_key,
+        secretAccessKey: AWSConfig.secret,
+      },
     });
     this.s3 = new AWS.S3();
-
     this.bucketName = AWSConfig.s3.bucket;
   }
 
