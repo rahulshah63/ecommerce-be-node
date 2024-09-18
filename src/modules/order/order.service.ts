@@ -34,7 +34,8 @@ export class OrderService extends BaseService<IOrderDocument> {
     const itemList = items.map(async ({ productId, quantity }) => {
       const product: IProductDocument = await ProductService.findById(productId);
       if (!product) throw new HttpException('Product not found', httpStatus.NOT_FOUND);
-      if (product.stock === AVAILABILITY.OUT_STOCK) throw new HttpException('Currently out of stock', httpStatus.NOT_FOUND);
+      if (product.stock === AVAILABILITY.OUT_STOCK || product.quantity === 0) throw new HttpException('Currently out of stock', httpStatus.NOT_FOUND);
+      if (product.quantity < quantity) throw new HttpException('Ordered quantity exceed the stock, cannot fulfill order', httpStatus.NOT_FOUND);
       const { price } = product;
       return { product: product._id, quantity, price, total: price * quantity };
     });
@@ -48,8 +49,9 @@ export class OrderService extends BaseService<IOrderDocument> {
     });
 
     for (const item of orderedItems) {
-      const { product, quantity } = item;
-      await ProductService.updateOne({ _id: product }, { $inc: { sold: quantity } });
+      const { product: productId, quantity } = item;
+      const product = await ProductService.repository.findOneAndUpdate({ _id: productId }, { $inc: { quantity: -quantity, sold: quantity } });
+      if (product.quantity === 0) await ProductService.updateOne({ _id: productId }, { stock: AVAILABILITY.OUT_STOCK });
     }
 
     // await this.cartService.deleteCart(userID);
