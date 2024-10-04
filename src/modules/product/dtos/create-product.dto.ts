@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
@@ -12,4 +13,8 @@ export class CreateProductDto {
   @IsNumber()
   @IsNotEmpty()
   price: string;
+
+  @IsNumber()
+  @Optional()
+  quantity: string;
 }
