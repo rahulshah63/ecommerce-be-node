@@ -1,5 +1,4 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { TYPE, SUBTYPE } from '../category.interface';
 
 export class CreateCategoryDto {
   @IsString()
@@ -16,11 +15,9 @@ export class CreateCategoryDto {
 
   @IsString()
   @IsNotEmpty()
-  @IsEnum(TYPE)
-  type: TYPE;
+  type: string;
 
   @IsString()
   @IsNotEmpty()
-  @IsEnum(SUBTYPE)
-  subtype: SUBTYPE;
+  subtype: string;
 }

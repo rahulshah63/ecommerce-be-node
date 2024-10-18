@@ -1,4 +1,4 @@
-import { ICategoryDocument, SUBTYPE, TYPE } from './category.interface';
+import { ICategoryDocument } from './category.interface';
 import { model, Schema } from 'mongoose';
 
 const CategorySchema: Schema<ICategoryDocument> = new Schema({
@@ -13,8 +13,8 @@ const CategorySchema: Schema<ICategoryDocument> = new Schema({
   image: {
     type: String,
   },
-  type: { type: String, enum: Object.values(TYPE), required: true },
-  subtype: { type: String, enum: Object.values(SUBTYPE), required: true },
+  type: { type: String, required: true },
+  subtype: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
